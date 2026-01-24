@@ -9,5 +9,4 @@ app.use(express.json());
 app.get("/health", (req, res) => {
   res.json({ status: "Backend is running 🚀" });
 });
-
 export default app;
