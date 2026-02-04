@@ -16,3 +16,15 @@ yarn-error.log*
 # OS
 .DS_Store
 Thumbs.db
+
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Node
+node_modules/
+.env
+
+# OS
+.DS_Store
