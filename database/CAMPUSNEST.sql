@@ -64,6 +64,17 @@ CREATE TABLE user_interactions (
     FOREIGN KEY (hostel_id) REFERENCES hostels(id) ON DELETE CASCADE
 );
 
+INSERT INTO users (full_name, email, password, user_role)
+VALUES (
+  'System Admin',
+  'campusnestai@gmail.com',
+  '$2b$10$DtrxKVYW0h9q0TT8B6IrtuiBAqKNlv6mPzcC2a8vONULg9cCgTXmi',
+  'admin'
+) AS new_user
+ON DUPLICATE KEY UPDATE
+  full_name = new_user.full_name,
+  user_role = 'admin';
+
 
 
 
