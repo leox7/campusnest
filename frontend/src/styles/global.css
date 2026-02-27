@@ -1,0 +1,12 @@
+:root {
+  --primary: #ebefee;
+  --secondary: #ccb499;
+  --tertiary: #c8906d;
+  --accent: #bb6c43;
+  --dark: #4a413c;
+  --timing: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#root {
+  width: 100%;
+}
