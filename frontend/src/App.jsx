@@ -5,10 +5,12 @@ import StudentLoginPage from './pages/auth/StudentLoginPage'
 import StudentRegisterPage from './pages/auth/StudentRegisterPage'
 import LandlordRegisterPage from './pages/auth/LandlordRegisterPage'
 import AdminLoginPage from './pages/auth/AdminLoginPage'
+import StudentDashboardPage from './pages/dashboard/StudentDashboardPage'
 
 function App() {
   return (
     <Routes>
+      <Route path="/dashboard/student" element={<StudentDashboardPage />} />
       <Route element={<AuthLayout />}>
         <Route path="/login/student" element={<StudentLoginPage />} />
         <Route path="/register/student" element={<StudentRegisterPage />} />

@@ -82,12 +82,17 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   const email = typeof req.body.email === "string" ? req.body.email.trim().toLowerCase() : "";
   const password = typeof req.body.password === "string" ? req.body.password : "";
+  const expectedRole =
+    typeof req.body.expected_role === "string" ? req.body.expected_role.trim().toLowerCase() : "";
 
   if (!email || !password) {
     return res.status(400).json({ message: "Email and password are required" });
   }
   if (!EMAIL_REGEX.test(email)) {
     return res.status(400).json({ message: "Please provide a valid email address" });
+  }
+  if (expectedRole && !["student", "landlord", "admin"].includes(expectedRole)) {
+    return res.status(400).json({ message: "Invalid expected role supplied" });
   }
 
   try {
@@ -107,6 +112,9 @@ export const login = async (req, res) => {
 
         if (!isMatch) {
           return res.status(401).json({ message: "Invalid credentials" });
+        }
+        if (expectedRole && user.user_role !== expectedRole) {
+          return res.status(403).json({ message: `This account is not allowed for ${expectedRole} login` });
         }
 
         const jwtConfig = getJwtConfig();

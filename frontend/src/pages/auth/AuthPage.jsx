@@ -103,11 +103,21 @@ function AuthPage({ routePath }) {
         const { token, user } = await loginUser({
           email: fields.email,
           password: fields.password,
+          expectedRole: page.role,
         })
+
+        if (user.role !== page.role) {
+          setSubmitError(`This account is not allowed for ${page.role} login.`)
+          return
+        }
+
         const storage = fields.rememberMe ? localStorage : sessionStorage
         storage.setItem('campusnest_token', token)
         storage.setItem('campusnest_user', JSON.stringify(user))
         setSubmitMessage(`Welcome back! Logged in as ${user.role}.`)
+        if (user.role === 'student') {
+          navigate('/dashboard/student')
+        }
       } else {
         await registerUser({
           fullName: fields.fullName,

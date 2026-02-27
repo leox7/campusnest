@@ -2,7 +2,7 @@ import connection from "../config/db.js";
 
 export const listMyHostels = (req, res) => {
   connection.query(
-    "SELECT id, landlord_id, name, location, price, description, is_flagged, flag_reason, created_at FROM hostels WHERE landlord_id = ? ORDER BY created_at DESC",
+    "SELECT id, landlord_id, name, location, price, description, created_at FROM hostels WHERE landlord_id = ? ORDER BY created_at DESC",
     [req.user.id],
     (err, results) => {
       if (err) return res.status(500).json({ error: err.message });
