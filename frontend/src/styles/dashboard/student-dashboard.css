@@ -95,6 +95,19 @@
   font-weight: 600;
 }
 
+.logout-btn {
+  border: 1px solid var(--secondary);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--dark);
+  padding: 8px 12px;
+}
+
+.logout-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
 .dashboard-hero {
   padding: 64px 0 86px;
   background: linear-gradient(180deg, #ebefee 0%, #ffffff 100%);
@@ -600,6 +613,11 @@
 
   .dashboard-nav {
     display: none;
+  }
+
+  .logout-btn {
+    padding: 6px 10px;
+    font-size: 12px;
   }
 
   .dashboard-hero {

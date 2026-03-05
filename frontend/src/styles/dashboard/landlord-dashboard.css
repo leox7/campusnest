@@ -1,0 +1,213 @@
+.landlord-dashboard-shell {
+  min-height: 100vh;
+  background: #ebefee;
+  color: #4a413c;
+  padding: 24px;
+}
+
+.landlord-dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.landlord-dashboard-header h1 {
+  margin: 0;
+}
+
+.landlord-dashboard-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.landlord-dashboard-header button {
+  border: none;
+  border-radius: 8px;
+  background: #bb6c43;
+  color: #fff;
+  padding: 10px 14px;
+}
+
+.landlord-logout-btn {
+  background: #fff !important;
+  color: #4a413c !important;
+  border: 1px solid #ccb499 !important;
+}
+
+.landlord-error {
+  margin-top: 14px;
+  color: #b85454;
+  font-weight: 600;
+}
+
+.landlord-form-card {
+  margin-top: 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(74, 65, 60, 0.08);
+  padding: 20px;
+}
+
+.landlord-form-card form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.landlord-form-card label {
+  display: grid;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.landlord-form-card input,
+.landlord-form-card select,
+.landlord-form-card textarea {
+  border: 1px solid rgba(204, 180, 153, 0.9);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.landlord-checkbox {
+  align-self: end;
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+}
+
+.landlord-description {
+  grid-column: span 2;
+}
+
+.landlord-form-actions {
+  grid-column: span 2;
+  display: flex;
+  gap: 10px;
+}
+
+.landlord-form-actions button {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.landlord-form-actions button:first-child {
+  background: #bb6c43;
+  color: #fff;
+}
+
+.landlord-list-section {
+  margin-top: 22px;
+  display: grid;
+  gap: 16px;
+}
+
+.landlord-hostel-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(74, 65, 60, 0.08);
+  padding: 16px;
+}
+
+.landlord-hostel-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.landlord-hostel-top h3 {
+  margin: 0;
+}
+
+.landlord-hostel-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.landlord-hostel-actions button {
+  border: 1px solid #ccb499;
+  background: #fff;
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+
+.landlord-image-manager {
+  margin-top: 10px;
+  border-top: 1px solid rgba(204, 180, 153, 0.5);
+  padding-top: 10px;
+}
+
+.landlord-image-manager h4 {
+  margin: 0 0 10px;
+}
+
+.landlord-image-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 8px;
+}
+
+.landlord-image-inputs input {
+  border: 1px solid rgba(204, 180, 153, 0.9);
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+
+.landlord-image-inputs button {
+  border: none;
+  background: #bb6c43;
+  color: #fff;
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+.landlord-image-list {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.landlord-image-list li {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(204, 180, 153, 0.45);
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.landlord-image-list a {
+  color: #bb6c43;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.landlord-image-list button {
+  border: 1px solid #ccb499;
+  background: #fff;
+  border-radius: 8px;
+  padding: 6px 8px;
+}
+
+@media (max-width: 767px) {
+  .landlord-dashboard-shell {
+    padding: 12px;
+  }
+
+  .landlord-form-card form,
+  .landlord-image-inputs,
+  .landlord-image-list li {
+    grid-template-columns: 1fr;
+  }
+
+  .landlord-description,
+  .landlord-form-actions {
+    grid-column: auto;
+  }
+}

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import HostelCard from '../../components/dashboard/HostelCard'
 import { getHostels, getSavedHostels, saveHostel } from '../../services/hostels.service'
 import '../../styles/dashboard/student-dashboard.css'
@@ -51,6 +52,7 @@ const normalizeHostel = (hostel) => {
 }
 
 function StudentDashboardPage() {
+  const navigate = useNavigate()
   const [activeNav, setActiveNav] = useState('Browse Hostels')
   const [locationQuery, setLocationQuery] = useState('')
   const [priceMin, setPriceMin] = useState(9000)
@@ -133,6 +135,14 @@ function StudentDashboardPage() {
     cardRefs.current[id]?.scrollIntoView({ behavior: 'smooth', block: 'center' })
   }
 
+  const handleLogout = () => {
+    localStorage.removeItem('campusnest_token')
+    localStorage.removeItem('campusnest_user')
+    sessionStorage.removeItem('campusnest_token')
+    sessionStorage.removeItem('campusnest_user')
+    navigate('/login/student')
+  }
+
   return (
     <div className="student-dashboard">
       <header className="dashboard-header">
@@ -161,6 +171,9 @@ function StudentDashboardPage() {
           </button>
           <button type="button" className="profile-avatar" aria-label="Profile">
             S
+          </button>
+          <button type="button" className="logout-btn" onClick={handleLogout}>
+            Logout
           </button>
         </div>
       </header>

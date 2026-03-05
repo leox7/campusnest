@@ -136,3 +136,15 @@ VALUES (
 ON DUPLICATE KEY UPDATE
   full_name = VALUES(full_name),
   user_role = VALUES(user_role);
+  
+  -- changes to table 
+  ALTER TABLE hostels
+ADD COLUMN average_rating DECIMAL(3,2) DEFAULT 0.00;
+
+ALTER TABLE hostels
+ADD COLUMN availability ENUM('available','full') DEFAULT 'available';
+
+
+
+
+  

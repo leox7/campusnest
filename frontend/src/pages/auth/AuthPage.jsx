@@ -117,6 +117,8 @@ function AuthPage({ routePath }) {
         setSubmitMessage(`Welcome back! Logged in as ${user.role}.`)
         if (user.role === 'student') {
           navigate('/dashboard/student')
+        } else if (user.role === 'landlord') {
+          navigate('/dashboard/landlord')
         }
       } else {
         await registerUser({

@@ -23,6 +23,7 @@ export const GALLERY_IMAGES = [
 
 export const ROUTE_META = {
   '/login/student': { title: 'Student Login', role: 'student', mode: 'login' },
+  '/login/landlord': { title: 'Landlord Login', role: 'landlord', mode: 'login' },
   '/register/student': { title: 'Student Registration', role: 'student', mode: 'register' },
   '/register/landlord': { title: 'Landlord Registration', role: 'landlord', mode: 'register' },
   '/login/admin': { title: 'Admin Login', role: 'admin', mode: 'login' },
@@ -30,7 +31,7 @@ export const ROUTE_META = {
 
 export const ROLE_ROUTES = {
   student: { login: '/login/student', register: '/register/student' },
-  landlord: { register: '/register/landlord' },
+  landlord: { login: '/login/landlord', register: '/register/landlord' },
   admin: { login: '/login/admin' },
 }
 
