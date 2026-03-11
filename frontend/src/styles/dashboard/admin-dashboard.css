@@ -1,0 +1,143 @@
+.admin-dashboard-shell {
+  min-height: 100vh;
+  background: #ebefee;
+  color: #4a413c;
+  padding: 24px;
+}
+
+.admin-dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.admin-dashboard-header h1 {
+  margin: 0;
+}
+
+.admin-dashboard-header button {
+  border: 1px solid #ccb499;
+  border-radius: 8px;
+  background: #fff;
+  color: #4a413c;
+  padding: 10px 14px;
+}
+
+.admin-error {
+  margin-top: 12px;
+  color: #b85454;
+  font-weight: 600;
+}
+
+.admin-card {
+  margin-top: 16px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(74, 65, 60, 0.08);
+  padding: 16px;
+}
+
+.admin-card h2 {
+  margin: 0 0 10px;
+}
+
+.admin-table-wrap {
+  overflow-x: auto;
+}
+
+.admin-card table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-card th,
+.admin-card td {
+  border-bottom: 1px solid rgba(204, 180, 153, 0.5);
+  text-align: left;
+  padding: 10px 8px;
+  font-size: 14px;
+}
+
+.admin-card button {
+  border: 1px solid #ccb499;
+  border-radius: 8px;
+  background: #fff;
+  color: #4a413c;
+  padding: 6px 10px;
+  margin-right: 8px;
+}
+
+.admin-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(27, 24, 22, 0.45);
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  z-index: 1200;
+}
+
+.admin-modal {
+  width: min(920px, 100%);
+  max-height: 85vh;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 14px;
+  padding: 18px;
+}
+
+.admin-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-modal-header h3 {
+  margin: 0;
+}
+
+.admin-modal-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.admin-modal-meta span {
+  border: 1px solid #ccb499;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 13px;
+}
+
+.admin-modal-description {
+  margin-top: 12px;
+  line-height: 1.45;
+}
+
+.admin-modal-images {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
+}
+
+.admin-modal-images img {
+  width: 100%;
+  height: 140px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 1px solid rgba(204, 180, 153, 0.65);
+}
+
+.admin-modal-actions {
+  margin-top: 14px;
+}
+
+@media (max-width: 767px) {
+  .admin-dashboard-shell {
+    padding: 12px;
+  }
+}

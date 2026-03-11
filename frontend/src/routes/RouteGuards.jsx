@@ -18,7 +18,7 @@ const readSession = () => {
 
 const resolveRolePath = (role) => {
   if (role === 'student') return '/dashboard/student'
-  if (role === 'admin') return '/login/admin'
+  if (role === 'admin') return '/dashboard/admin'
   if (role === 'landlord') return '/dashboard/landlord'
   return '/login/student'
 }
@@ -48,6 +48,17 @@ export function RequireLandlordAuth({ children }) {
     return <Navigate to="/login/landlord" replace />
   }
   if (role !== 'landlord') {
+    return <Navigate to={resolveRolePath(role)} replace />
+  }
+  return children
+}
+
+export function RequireAdminAuth({ children }) {
+  const { token, role } = readSession()
+  if (!token) {
+    return <Navigate to="/login/admin" replace />
+  }
+  if (role !== 'admin') {
     return <Navigate to={resolveRolePath(role)} replace />
   }
   return children

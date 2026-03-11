@@ -8,7 +8,8 @@ import LandlordRegisterPage from './pages/auth/LandlordRegisterPage'
 import AdminLoginPage from './pages/auth/AdminLoginPage'
 import StudentDashboardPage from './pages/dashboard/StudentDashboardPage'
 import LandlordDashboardPage from './pages/dashboard/LandlordDashboardPage'
-import { GuestOnlyRoute, RequireLandlordAuth, RequireStudentAuth } from './routes/RouteGuards'
+import AdminDashboardPage from './pages/dashboard/AdminDashboardPage'
+import { GuestOnlyRoute, RequireAdminAuth, RequireLandlordAuth, RequireStudentAuth } from './routes/RouteGuards'
 
 function App() {
   return (
@@ -19,6 +20,14 @@ function App() {
           <RequireStudentAuth>
             <StudentDashboardPage />
           </RequireStudentAuth>
+        }
+      />
+      <Route
+        path="/dashboard/admin"
+        element={
+          <RequireAdminAuth>
+            <AdminDashboardPage />
+          </RequireAdminAuth>
         }
       />
       <Route
