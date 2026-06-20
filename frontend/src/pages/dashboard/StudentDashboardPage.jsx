@@ -1,59 +1,28 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import HostelCard from '../../components/dashboard/HostelCard'
+import StudentDashboardLayout from '../../components/dashboard/StudentDashboardLayout'
 import { getHostels, getSavedHostels, saveHostel } from '../../services/hostels.service'
+import { normalizeHostel } from '../../utils/hostel.utils'
 import '../../styles/dashboard/student-dashboard.css'
 
 const ROOM_TYPES = ['Single Room', 'Shared', 'Studio', 'Apartment']
 const SORT_OPTIONS = ['Relevance', 'Price', 'Distance', 'Rating']
 const FILTER_OPTIONS = [
-  { id: 'all', label: '🎯 All' },
-  { id: 'top', label: '⭐ Top Rated' },
-  { id: 'ai', label: '🤖 AI Recommended' },
-  { id: 'verified', label: '✅ Verified' },
-  { id: 'near', label: '📍 Near Campus (<2km)' },
-  { id: 'budget', label: '💵 Budget Friendly' },
-  { id: 'premium', label: '🏆 Premium' },
+  { id: 'all', label: 'All' },
+  { id: 'top', label: 'Top Rated' },
+  { id: 'ai', label: 'AI Recommended' },
+  { id: 'verified', label: 'Verified' },
+  { id: 'near', label: 'Near Campus (<2km)' },
+  { id: 'budget', label: 'Budget Friendly' },
+  { id: 'premium', label: 'Premium' },
 ]
 
 const MIN_PRICE = 5000
 const MAX_PRICE = 35000
 
-const FALLBACK_IMAGE = {
-  src: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1400&q=80',
-  alt: 'Hostel room preview',
-}
-
-const normalizeHostel = (hostel) => {
-  const images =
-    Array.isArray(hostel.images) && hostel.images.length > 0
-      ? hostel.images.map((image) => ({
-          src: image.url ?? image.src ?? FALLBACK_IMAGE.src,
-          alt: image.alt ?? image.alt_text ?? FALLBACK_IMAGE.alt,
-        }))
-      : [FALLBACK_IMAGE]
-
-  return {
-    id: hostel.id,
-    name: hostel.name ?? 'Untitled Hostel',
-    area: hostel.area ?? hostel.location ?? '',
-    distanceKm: Number(hostel.distanceKm ?? hostel.distance_km ?? 0),
-    roomType: hostel.roomType ?? hostel.room_type ?? 'Single Room',
-    rating: Number(hostel.rating ?? 0),
-    reviews: Number(hostel.reviewsCount ?? hostel.reviews_count ?? 0),
-    price: Number(hostel.price ?? 0),
-    utilitiesIncluded: Boolean(hostel.utilitiesIncluded ?? hostel.utilities_included),
-    aiPick: Boolean(hostel.aiPick ?? hostel.ai_pick),
-    verified: Boolean(hostel.verified),
-    markerX: Number(hostel.markerX ?? hostel.marker_x ?? 50),
-    markerY: Number(hostel.markerY ?? hostel.marker_y ?? 50),
-    images,
-  }
-}
-
 function StudentDashboardPage() {
   const navigate = useNavigate()
-  const [activeNav, setActiveNav] = useState('Browse Hostels')
   const [locationQuery, setLocationQuery] = useState('')
   const [priceMin, setPriceMin] = useState(9000)
   const [priceMax, setPriceMax] = useState(28000)
@@ -135,49 +104,12 @@ function StudentDashboardPage() {
     cardRefs.current[id]?.scrollIntoView({ behavior: 'smooth', block: 'center' })
   }
 
-  const handleLogout = () => {
-    localStorage.removeItem('campusnest_token')
-    localStorage.removeItem('campusnest_user')
-    sessionStorage.removeItem('campusnest_token')
-    sessionStorage.removeItem('campusnest_user')
-    navigate('/login/student')
+  const handleViewDetails = (id) => {
+    navigate(`/dashboard/student/hostels/${id}`)
   }
 
   return (
-    <div className="student-dashboard">
-      <header className="dashboard-header">
-        <div className="dashboard-logo">
-          <span className="logo-icon">🏠</span>
-          <span>CampusNest AI</span>
-        </div>
-
-        <nav className="dashboard-nav">
-          {['Browse Hostels', 'My Bookings', 'Messages', 'Saved'].map((item) => (
-            <button
-              key={item}
-              type="button"
-              className={`dashboard-nav-link ${activeNav === item ? 'active' : ''}`}
-              onClick={() => setActiveNav(item)}
-            >
-              {item}
-            </button>
-          ))}
-        </nav>
-
-        <div className="dashboard-header-right">
-          <button type="button" className="notif-btn" aria-label="Notifications">
-            🔔
-            <span className="notif-badge">2</span>
-          </button>
-          <button type="button" className="profile-avatar" aria-label="Profile">
-            S
-          </button>
-          <button type="button" className="logout-btn" onClick={handleLogout}>
-            Logout
-          </button>
-        </div>
-      </header>
-
+    <StudentDashboardLayout activeNav="Browse Hostels">
       <section className="dashboard-hero">
         <h1>Welcome back, Student</h1>
         <p>Find your perfect campus accommodation</p>
@@ -189,12 +121,12 @@ function StudentDashboardPage() {
           className="search-collapse-toggle"
           onClick={() => setMobileSearchOpen((prev) => !prev)}
         >
-          {mobileSearchOpen ? 'Hide Search ✕' : '🔍 Search Hostels'}
+          {mobileSearchOpen ? 'Hide Search' : 'Search Hostels'}
         </button>
 
         <div className="dashboard-search-grid">
           <div className="search-field location">
-            <span className="field-icon">📍</span>
+            <span className="field-icon field-icon--location" aria-hidden="true" />
             <input
               type="text"
               placeholder="University or Area"
@@ -204,7 +136,7 @@ function StudentDashboardPage() {
           </div>
 
           <div className="search-field price">
-            <span className="field-icon">💰</span>
+            <span className="field-icon field-icon--price" aria-hidden="true" />
             <div className="price-slider-wrap">
               <div
                 className="price-slider-active-track"
@@ -238,7 +170,7 @@ function StudentDashboardPage() {
           </div>
 
           <div className="search-field room-type">
-            <span className="field-icon">🛏️</span>
+            <span className="field-icon field-icon--room" aria-hidden="true" />
             <select value={roomType} onChange={(event) => setRoomType(event.target.value)}>
               <option value="">All room types</option>
               {ROOM_TYPES.map((option) => (
@@ -250,7 +182,7 @@ function StudentDashboardPage() {
           </div>
 
           <button type="button" className="search-cta">
-            🔍 Search
+            Search
           </button>
         </div>
       </section>
@@ -277,7 +209,7 @@ function StudentDashboardPage() {
               onClick={() => setMapView((prev) => !prev)}
               aria-label="Toggle map view"
             >
-              {mapView ? '📋' : '🗺️'}
+              {mapView ? 'List' : 'Map'}
             </button>
 
             <label className="sort-select-wrap">
@@ -310,6 +242,7 @@ function StudentDashboardPage() {
                   hostel={hostel}
                   isSaved={savedIds.includes(hostel.id)}
                   onToggleSave={toggleSave}
+                  onViewDetails={handleViewDetails}
                   isHighlighted={highlightedId === hostel.id}
                   onHover={() => setHighlightedId(hostel.id)}
                 />
@@ -329,21 +262,14 @@ function StudentDashboardPage() {
                   onClick={() => handleMarkerClick(hostel.id)}
                   aria-label={`Show ${hostel.name}`}
                 >
-                  📍
+                  <span className="map-marker-dot" aria-hidden="true" />
                 </button>
               ))}
             </div>
           </aside>
         </section>
       </main>
-
-      <nav className="mobile-bottom-nav" aria-label="Mobile dashboard navigation">
-        <button type="button">Browse</button>
-        <button type="button">Saved</button>
-        <button type="button">Messages</button>
-        <button type="button">Profile</button>
-      </nav>
-    </div>
+    </StudentDashboardLayout>
   )
 }
 

@@ -16,7 +16,7 @@ app.use("/api/landlord", landlordRoutes);
 app.use("/api/hostels", hostelRoutes);
 
 app.get("/health", (req, res) => {
-  res.json({ status: "Backend is running 🚀" });
+  res.json({ status: "Backend is running" });
 });
 
 export default app;

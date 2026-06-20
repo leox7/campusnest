@@ -13,7 +13,7 @@ router.use(authenticateToken);
 
 router.get("/", requireRole("student"), listHostels);
 router.get("/saved", requireRole("student"), listSavedHostels);
-router.get("/:id", getHostelById);
+router.get("/:id", requireRole("student"), getHostelById);
 router.post("/:id/save", requireRole("student"), toggleSavedHostel);
 
 export default router;

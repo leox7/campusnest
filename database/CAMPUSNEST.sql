@@ -1,6 +1,4 @@
--- ==========================================
--- CampusNest AI (Improved Student-Friendly Schema)
--- ==========================================
+
 
 DROP DATABASE IF EXISTS student_accommodation;
 CREATE DATABASE student_accommodation;

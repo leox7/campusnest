@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-function HostelCard({ hostel, isSaved, onToggleSave, isHighlighted, onHover }) {
+function HostelCard({ hostel, isSaved, onToggleSave, onViewDetails, isHighlighted, onHover }) {
   const [activeImage, setActiveImage] = useState(0)
   const [loadedImages, setLoadedImages] = useState({})
 
@@ -10,7 +10,13 @@ function HostelCard({ hostel, isSaved, onToggleSave, isHighlighted, onHover }) {
 
   const renderStars = (rating) => {
     const filled = Math.round(rating)
-    return Array.from({ length: 5 }, (_, index) => (index < filled ? '★' : '☆')).join('')
+    return Array.from({ length: 5 }, (_, index) => (
+      <span
+        key={index}
+        className={`star ${index < filled ? 'star-filled' : 'star-empty'}`}
+        aria-hidden="true"
+      />
+    ))
   }
 
   const currentImage = hostel.images[activeImage]
@@ -31,8 +37,8 @@ function HostelCard({ hostel, isSaved, onToggleSave, isHighlighted, onHover }) {
         />
 
         <div className="hostel-card-badges">
-          {hostel.aiPick ? <span className="hostel-badge ai">🤖 AI Pick</span> : null}
-          {hostel.verified ? <span className="hostel-badge verified">✅ Verified</span> : null}
+          {hostel.aiPick ? <span className="hostel-badge ai">AI Pick</span> : null}
+          {hostel.verified ? <span className="hostel-badge verified">Verified</span> : null}
         </div>
 
         <button
@@ -40,17 +46,13 @@ function HostelCard({ hostel, isSaved, onToggleSave, isHighlighted, onHover }) {
           className="carousel-arrow prev"
           onClick={() => handleMove(-1)}
           aria-label="Previous hostel image"
-        >
-          ‹
-        </button>
+        />
         <button
           type="button"
           className="carousel-arrow next"
           onClick={() => handleMove(1)}
           aria-label="Next hostel image"
-        >
-          ›
-        </button>
+        />
 
         <div className="carousel-dots">
           {hostel.images.map((image, index) => (
@@ -74,12 +76,12 @@ function HostelCard({ hostel, isSaved, onToggleSave, isHighlighted, onHover }) {
             onClick={() => onToggleSave(hostel.id)}
             aria-label={isSaved ? 'Remove from saved' : 'Save hostel'}
           >
-            ♥
+            {isSaved ? 'Saved' : 'Save'}
           </button>
         </div>
 
         <div className="hostel-meta-row">
-          <span className="distance-badge">📍 {hostel.distanceKm}km from campus</span>
+          <span className="distance-badge">{hostel.distanceKm} km from campus</span>
           <span className="room-badge">{hostel.roomType}</span>
         </div>
 
@@ -95,7 +97,11 @@ function HostelCard({ hostel, isSaved, onToggleSave, isHighlighted, onHover }) {
           <span>{hostel.utilitiesIncluded ? 'Utilities included' : 'Utilities billed separately'}</span>
         </div>
 
-        <button type="button" className="details-btn">
+        <button
+          type="button"
+          className="details-btn"
+          onClick={() => onViewDetails?.(hostel.id)}
+        >
           View Details
         </button>
       </div>

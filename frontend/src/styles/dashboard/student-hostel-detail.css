@@ -1,0 +1,157 @@
+.hostel-detail-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 32px 48px;
+}
+
+.detail-back-link {
+  border: none;
+  background: transparent;
+  color: var(--accent);
+  font-weight: 600;
+  padding: 8px 0;
+  margin-bottom: 16px;
+  cursor: pointer;
+}
+
+.detail-back-link:hover {
+  text-decoration: underline;
+}
+
+.detail-status {
+  padding: 40px 0;
+  font-size: 16px;
+  color: var(--dark);
+}
+
+.hostel-detail {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 32px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 8px 28px rgba(74, 65, 60, 0.08);
+}
+
+.hostel-detail-image {
+  width: 100%;
+  height: 360px;
+  object-fit: cover;
+  border-radius: 12px;
+  display: block;
+}
+
+.hostel-detail-thumbs {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.hostel-detail-thumb {
+  width: 72px;
+  height: 56px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  padding: 0;
+  cursor: pointer;
+  background: none;
+}
+
+.hostel-detail-thumb.active {
+  border-color: var(--accent);
+}
+
+.hostel-detail-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.hostel-detail-info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.hostel-detail-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.hostel-detail-heading h1 {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.hostel-detail-badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.hostel-badge.pending {
+  background: #f1e7da;
+  color: #8a6d3b;
+}
+
+.hostel-detail-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hostel-detail-meta {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.meta-chip {
+  background: var(--primary);
+  color: var(--dark);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.hostel-detail-price {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--accent);
+  margin: 0;
+}
+
+.hostel-detail-description h2 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 8px;
+}
+
+.hostel-detail-description p {
+  line-height: 1.6;
+  color: var(--dark);
+  margin: 0;
+}
+
+@media (max-width: 767px) {
+  .hostel-detail-page {
+    padding: 16px 16px 40px;
+  }
+
+  .hostel-detail {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .hostel-detail-image {
+    height: 240px;
+  }
+}

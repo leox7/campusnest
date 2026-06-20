@@ -1,0 +1,56 @@
+.saved-hostels-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 32px 48px;
+}
+
+.saved-hostels-hero {
+  margin-bottom: 20px;
+}
+
+.saved-hostels-hero h1 {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 4px;
+}
+
+.saved-hostels-hero p {
+  color: var(--tertiary);
+  margin: 0;
+}
+
+.saved-status {
+  padding: 24px 0;
+  color: var(--dark);
+}
+
+.saved-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 8px 28px rgba(74, 65, 60, 0.08);
+}
+
+.saved-empty button {
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.saved-empty button:hover {
+  opacity: 0.92;
+}
+
+@media (max-width: 767px) {
+  .saved-hostels-page {
+    padding: 16px 16px 40px;
+  }
+}

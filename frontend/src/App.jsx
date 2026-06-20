@@ -7,6 +7,8 @@ import LandlordLoginPage from './pages/auth/LandlordLoginPage'
 import LandlordRegisterPage from './pages/auth/LandlordRegisterPage'
 import AdminLoginPage from './pages/auth/AdminLoginPage'
 import StudentDashboardPage from './pages/dashboard/StudentDashboardPage'
+import StudentHostelDetailPage from './pages/dashboard/StudentHostelDetailPage'
+import SavedHostelsPage from './pages/dashboard/SavedHostelsPage'
 import LandlordDashboardPage from './pages/dashboard/LandlordDashboardPage'
 import AdminDashboardPage from './pages/dashboard/AdminDashboardPage'
 import { GuestOnlyRoute, RequireAdminAuth, RequireLandlordAuth, RequireStudentAuth } from './routes/RouteGuards'
@@ -19,6 +21,22 @@ function App() {
         element={
           <RequireStudentAuth>
             <StudentDashboardPage />
+          </RequireStudentAuth>
+        }
+      />
+      <Route
+        path="/dashboard/student/saved"
+        element={
+          <RequireStudentAuth>
+            <SavedHostelsPage />
+          </RequireStudentAuth>
+        }
+      />
+      <Route
+        path="/dashboard/student/hostels/:id"
+        element={
+          <RequireStudentAuth>
+            <StudentHostelDetailPage />
           </RequireStudentAuth>
         }
       />

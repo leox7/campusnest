@@ -13,6 +13,14 @@ const asPositiveNumber = (value) => {
   return Number.isFinite(parsed) && parsed >= 0 ? parsed : null;
 };
 
+const logInteraction = (userId, hostelId, type) => {
+  connection.query(
+    "INSERT INTO user_interactions (user_id, hostel_id, interaction_type) VALUES (?, ?, ?)",
+    [userId, hostelId, type],
+    () => {}
+  );
+};
+
 const mapRowToHostel = (row) => ({
   id: row.id,
   landlordId: row.landlord_id,
@@ -23,9 +31,11 @@ const mapRowToHostel = (row) => ({
   price: Number(row.price),
   description: row.description,
   utilitiesIncluded: Boolean(row.utilities_included),
+  availability: row.availability ?? "available",
   aiPick: Boolean(row.ai_pick),
   verified: Boolean(row.verified),
   rating: Number(row.rating ?? 0),
+  averageRating: Number(row.average_rating ?? row.rating ?? 0),
   reviewsCount: Number(row.reviews_count ?? 0),
   markerX: Number(row.marker_x ?? 50),
   markerY: Number(row.marker_y ?? 50),
@@ -91,6 +101,8 @@ export const listHostels = (req, res) => {
     if (filter === "premium") filters.push("h.price >= 22000");
   }
 
+  filters.push("h.verified = TRUE");
+
   const whereClause = filters.length > 0 ? `WHERE ${filters.join(" AND ")}` : "";
   const orderBy = SORT_MAP[sortBy] || SORT_MAP.relevance;
 
@@ -105,9 +117,11 @@ export const listHostels = (req, res) => {
       h.price,
       h.description,
       h.utilities_included,
+      h.availability,
       h.ai_pick,
       h.verified,
       h.reviews_count,
+      h.average_rating,
       h.marker_x,
       h.marker_y,
       COALESCE(r.avg_rating, 0) AS rating,
@@ -150,9 +164,11 @@ export const getHostelById = (req, res) => {
       h.price,
       h.description,
       h.utilities_included,
+      h.availability,
       h.ai_pick,
       h.verified,
       h.reviews_count,
+      h.average_rating,
       h.marker_x,
       h.marker_y,
       COALESCE(r.avg_rating, 0) AS rating,
@@ -177,6 +193,12 @@ export const getHostelById = (req, res) => {
     if (!rows.length) return res.status(404).json({ message: "Hostel not found" });
 
     const [hostel] = mergeHostelRows(rows);
+
+    if (req.user.role === "student" && !hostel.verified) {
+      return res.status(404).json({ message: "Hostel not found" });
+    }
+
+    logInteraction(req.user.id, hostelId, "view");
     return res.status(200).json({ hostel });
   });
 };
@@ -241,9 +263,11 @@ export const listSavedHostels = (req, res) => {
       h.price,
       h.description,
       h.utilities_included,
+      h.availability,
       h.ai_pick,
       h.verified,
       h.reviews_count,
+      h.average_rating,
       h.marker_x,
       h.marker_y,
       COALESCE(r.avg_rating, 0) AS rating,

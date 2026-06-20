@@ -28,6 +28,11 @@ venv/
 __pycache__/
 *.pyc
 
+# Internal planning / AI workflow artifacts (do not push)
+.claude/
+CLAUDE.md
+docs/
+
 # Node
 node_modules/
 .env
