@@ -1,0 +1,259 @@
+.bookings-page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.bookings-page-header {
+  margin-bottom: 1.5rem;
+}
+
+.bookings-page-header h1 {
+  font-size: 1.6rem;
+  color: var(--dark);
+  margin: 0 0 0.3rem;
+}
+
+.bookings-page-header p {
+  color: var(--dark);
+  opacity: 0.7;
+  margin: 0;
+}
+
+.bookings-status {
+  color: var(--dark);
+  opacity: 0.8;
+  padding: 1.5rem 0;
+}
+
+.bookings-error {
+  background: #fdeceb;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  border-radius: 0.6rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.bookings-empty {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  border: 1.5px dashed var(--secondary);
+  border-radius: 0.9rem;
+  color: var(--dark);
+}
+
+.bookings-empty h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.2rem;
+}
+
+.bookings-empty a,
+.bookings-empty button {
+  display: inline-block;
+  margin-top: 1rem;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  cursor: pointer;
+  font: inherit;
+}
+
+.bookings-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.booking-card {
+  border: 1px solid var(--secondary);
+  border-radius: 0.9rem;
+  padding: 1.25rem;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.booking-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.booking-card-title h2 {
+  margin: 0 0 0.2rem;
+  font-size: 1.15rem;
+  color: var(--dark);
+}
+
+.booking-card-title p {
+  margin: 0;
+  color: var(--dark);
+  opacity: 0.7;
+  font-size: 0.9rem;
+}
+
+.booking-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  color: var(--dark);
+  font-size: 0.9rem;
+}
+
+.booking-meta span strong {
+  font-weight: 600;
+}
+
+.status-badge {
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status-badge.pending {
+  background: #fdf0d5;
+  color: #9a6b00;
+}
+
+.status-badge.confirmed {
+  background: #e3f5e8;
+  color: #1f7a44;
+}
+
+.status-badge.cancelled {
+  background: #ececec;
+  color: #6b6b6b;
+}
+
+.booking-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding-top: 0.25rem;
+}
+
+.booking-btn {
+  border-radius: 0.5rem;
+  padding: 0.5rem 1.1rem;
+  font: inherit;
+  font-size: 0.88rem;
+  cursor: pointer;
+  border: 1.5px solid var(--secondary);
+  background: #fff;
+  color: var(--dark);
+}
+
+.booking-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.booking-btn.pay {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.booking-btn.cancel:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.booking-receipt {
+  border-top: 1px dashed var(--secondary);
+  margin-top: 0.25rem;
+  padding-top: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--dark);
+}
+
+.booking-receipt h3 {
+  margin: 0 0 0.4rem;
+  font-size: 0.95rem;
+}
+
+.booking-receipt-row {
+  display: flex;
+  justify-content: space-between;
+  max-width: 320px;
+}
+
+/* Book Now flow on the hostel detail page */
+.hostel-detail-booking {
+  margin: 1.25rem 0 0.5rem;
+}
+
+.book-now-btn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.65rem 1.4rem;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.book-now-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.booking-unavailable {
+  color: var(--accent);
+  font-weight: 600;
+  margin: 0;
+}
+
+.booking-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 320px;
+}
+
+.booking-form label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--dark);
+}
+
+.booking-form input[type='date'] {
+  border: 1.5px solid var(--secondary);
+  border-radius: 0.5rem;
+  padding: 0.55rem 0.75rem;
+  font: inherit;
+  color: var(--dark);
+}
+
+.booking-form-actions {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.booking-cancel-btn {
+  background: #fff;
+  color: var(--dark);
+  border: 1.5px solid var(--secondary);
+  border-radius: 0.5rem;
+  padding: 0.65rem 1.2rem;
+  font: inherit;
+  cursor: pointer;
+}
+
+.booking-cancel-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.booking-form-error {
+  color: var(--accent);
+  font-size: 0.88rem;
+  margin: 0;
+}

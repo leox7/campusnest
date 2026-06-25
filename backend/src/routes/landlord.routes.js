@@ -8,6 +8,7 @@ import {
   updateHostelImage,
   updateHostel,
 } from "../controllers/landlord.controller.js";
+import { listLandlordBookings } from "../controllers/bookingNotifications.controller.js";
 import { authenticateToken, requireRole } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
@@ -15,6 +16,7 @@ const router = express.Router();
 router.use(authenticateToken, requireRole("landlord"));
 
 router.get("/hostels", listMyHostels);
+router.get("/bookings", listLandlordBookings);
 router.post("/hostels", createHostel);
 router.put("/hostels/:id", updateHostel);
 router.delete("/hostels/:id", deleteHostel);

@@ -3,7 +3,7 @@ import '../../styles/dashboard/student-dashboard.css'
 
 const NAV_ITEMS = [
   { label: 'Browse Hostels', path: '/dashboard/student' },
-  { label: 'My Bookings', path: null },
+  { label: 'My Bookings', path: '/dashboard/student/bookings' },
   { label: 'Messages', path: null },
   { label: 'Saved', path: '/dashboard/student/saved' },
 ]

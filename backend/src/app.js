@@ -4,6 +4,8 @@ import authRoutes from "./routes/auth.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
 import landlordRoutes from "./routes/landlord.routes.js";
 import hostelRoutes from "./routes/hostels.routes.js";
+import bookingRoutes from "./routes/bookings.routes.js";
+import reviewRoutes from "./routes/reviews.routes.js";
 
 const app = express();
 
@@ -14,6 +16,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/landlord", landlordRoutes);
 app.use("/api/hostels", hostelRoutes);
+app.use("/api/bookings", bookingRoutes);
+app.use("/api/reviews", reviewRoutes);
 
 app.get("/health", (req, res) => {
   res.json({ status: "Backend is running" });

@@ -6,12 +6,28 @@ import {
   getAdminUsers,
   verifyHostel,
 } from '../../services/admin.service'
+import { getAdminBookings } from '../../services/adminBookings.service'
 import '../../styles/dashboard/admin-dashboard.css'
+import '../../styles/dashboard/booking-notifications.css'
+
+const STATUS_LABEL = {
+  pending: 'Pending',
+  confirmed: 'Confirmed',
+  cancelled: 'Cancelled',
+}
+
+const formatBookingDate = (value) => {
+  if (!value) return '-'
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return value
+  return date.toLocaleDateString('en-KE', { year: 'numeric', month: 'short', day: 'numeric' })
+}
 
 function AdminDashboardPage() {
   const navigate = useNavigate()
   const [hostels, setHostels] = useState([])
   const [users, setUsers] = useState([])
+  const [bookings, setBookings] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [selectedHostel, setSelectedHostel] = useState(null)
@@ -26,14 +42,20 @@ function AdminDashboardPage() {
     setLoading(true)
     setError('')
     try {
-      const [hostelsResponse, usersResponse] = await Promise.all([getAdminHostels(), getAdminUsers()])
+      const [hostelsResponse, usersResponse, bookingsResponse] = await Promise.all([
+        getAdminHostels(),
+        getAdminUsers(),
+        getAdminBookings(),
+      ])
       setHostels(hostelsResponse.hostels ?? [])
       setUsers(usersResponse.users ?? [])
+      setBookings(bookingsResponse.bookings ?? [])
     } catch (fetchError) {
       const message = fetchError.response?.data?.message || 'Failed to load admin dashboard data.'
       setError(message)
       setHostels([])
       setUsers([])
+      setBookings([])
     } finally {
       setLoading(false)
     }
@@ -84,7 +106,14 @@ function AdminDashboardPage() {
   return (
     <div className="admin-dashboard-shell">
       <header className="admin-dashboard-header">
-        <h1>Admin Dashboard</h1>
+        <h1>
+          Admin Dashboard
+          {bookings.length > 0 ? (
+            <span className="booking-notif-badge" aria-label={`${bookings.length} bookings`}>
+              {bookings.length}
+            </span>
+          ) : null}
+        </h1>
         <button type="button" onClick={handleLogout}>
           Logout
         </button>
@@ -96,6 +125,44 @@ function AdminDashboardPage() {
         <p>Loading admin data...</p>
       ) : (
         <>
+          <section className="admin-card">
+            <h2>Recent Bookings</h2>
+            {bookings.length === 0 ? (
+              <p className="booking-notif-empty">No bookings have been made yet.</p>
+            ) : (
+              <div className="admin-table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Hostel</th>
+                      <th>Student</th>
+                      <th>Landlord</th>
+                      <th>Move-in</th>
+                      <th>Status</th>
+                      <th>Payment</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {bookings.map((booking) => (
+                      <tr key={booking.id}>
+                        <td>{booking.hostelName}</td>
+                        <td>{booking.student?.name || booking.student?.email || '-'}</td>
+                        <td>{booking.landlord?.name || booking.landlord?.email || '-'}</td>
+                        <td>{formatBookingDate(booking.bookingDate)}</td>
+                        <td>
+                          <span className={`notif-status ${booking.status}`}>
+                            {STATUS_LABEL[booking.status] || booking.status}
+                          </span>
+                        </td>
+                        <td>{booking.payment ? booking.payment.status : 'Not paid'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </section>
+
           <section className="admin-card">
             <h2>Listings Needing Review</h2>
             {pendingHostels.length === 0 ? (

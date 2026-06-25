@@ -9,7 +9,22 @@ import {
   updateLandlordHostel,
   updateLandlordHostelImage,
 } from '../../services/landlordHostels.service'
+import { getLandlordBookings } from '../../services/landlordBookings.service'
 import '../../styles/dashboard/landlord-dashboard.css'
+import '../../styles/dashboard/booking-notifications.css'
+
+const STATUS_LABEL = {
+  pending: 'Pending',
+  confirmed: 'Confirmed',
+  cancelled: 'Cancelled',
+}
+
+const formatBookingDate = (value) => {
+  if (!value) return '-'
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return value
+  return date.toLocaleDateString('en-KE', { year: 'numeric', month: 'short', day: 'numeric' })
+}
 
 const ROOM_TYPES = ['Single Room', 'Shared', 'Studio', 'Apartment']
 const AVAILABILITY = ['available', 'full']
@@ -36,6 +51,8 @@ function LandlordDashboardPage() {
   const [form, setForm] = useState(INITIAL_FORM)
   const [editingId, setEditingId] = useState(null)
   const [imageFormByHostel, setImageFormByHostel] = useState({})
+  const [bookings, setBookings] = useState([])
+  const [bookingsLoading, setBookingsLoading] = useState(true)
 
   const sortedHostels = useMemo(
     () => [...hostels].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()),
@@ -57,8 +74,21 @@ function LandlordDashboardPage() {
     }
   }
 
+  const loadBookings = async () => {
+    setBookingsLoading(true)
+    try {
+      const response = await getLandlordBookings()
+      setBookings(response.bookings ?? [])
+    } catch {
+      setBookings([])
+    } finally {
+      setBookingsLoading(false)
+    }
+  }
+
   useEffect(() => {
     loadHostels()
+    loadBookings()
   }, [])
 
   const handleFormChange = (event) => {
@@ -195,7 +225,14 @@ function LandlordDashboardPage() {
   return (
     <div className="landlord-dashboard-shell">
       <header className="landlord-dashboard-header">
-        <h1>Landlord Dashboard</h1>
+        <h1>
+          Landlord Dashboard
+          {bookings.length > 0 ? (
+            <span className="booking-notif-badge" aria-label={`${bookings.length} bookings`}>
+              {bookings.length}
+            </span>
+          ) : null}
+        </h1>
         <div className="landlord-dashboard-actions">
           <button type="button" onClick={() => setIsCreating((prev) => !prev)}>
             {isCreating ? 'Close Form' : 'Add Hostel'}
@@ -207,6 +244,55 @@ function LandlordDashboardPage() {
       </header>
 
       {error ? <p className="landlord-error">{error}</p> : null}
+
+      <section className="landlord-form-card">
+        <h2>Bookings on Your Hostels</h2>
+        {bookingsLoading ? (
+          <p className="booking-notif-empty">Loading bookings...</p>
+        ) : bookings.length === 0 ? (
+          <p className="booking-notif-empty">
+            No bookings yet. You will be notified here when a student books one of your hostels.
+          </p>
+        ) : (
+          <div className="booking-notif-list">
+            {bookings.map((booking) => (
+              <article
+                key={booking.id}
+                className={`booking-notif-card ${booking.status === 'pending' ? 'is-new' : ''}`}
+              >
+                <div className="booking-notif-top">
+                  <div>
+                    <h4>{booking.hostelName}</h4>
+                    <p>
+                      {booking.student?.name || 'Student'}
+                      {booking.student?.email ? ` • ${booking.student.email}` : ''}
+                    </p>
+                  </div>
+                  <span className={`notif-status ${booking.status}`}>
+                    {STATUS_LABEL[booking.status] || booking.status}
+                  </span>
+                </div>
+                <div className="booking-notif-meta">
+                  <span>
+                    <strong>Move-in:</strong> {formatBookingDate(booking.bookingDate)}
+                  </span>
+                  <span>
+                    <strong>Booked:</strong> {formatBookingDate(booking.createdAt)}
+                  </span>
+                  <span>
+                    <strong>Price:</strong>{' '}
+                    {booking.price === null ? '-' : `KES ${Number(booking.price).toLocaleString('en-KE')}`}
+                  </span>
+                  <span>
+                    <strong>Payment:</strong>{' '}
+                    {booking.payment ? `${booking.payment.status}` : 'Not paid'}
+                  </span>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
+      </section>
 
       {isCreating ? (
         <section className="landlord-form-card">
