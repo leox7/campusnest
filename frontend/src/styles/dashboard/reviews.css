@@ -109,6 +109,26 @@
   color: var(--dark);
 }
 
+.review-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.9rem;
+}
+
+.review-summary-stars {
+  color: var(--accent);
+  letter-spacing: 0.1rem;
+  font-size: 1.1rem;
+  white-space: nowrap;
+}
+
+.review-summary-value {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--dark);
+}
+
 .review-list-status {
   color: var(--dark);
   opacity: 0.7;

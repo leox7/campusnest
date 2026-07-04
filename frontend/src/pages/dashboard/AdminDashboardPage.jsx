@@ -7,6 +7,7 @@ import {
   verifyHostel,
 } from '../../services/admin.service'
 import { getAdminBookings } from '../../services/adminBookings.service'
+import ReviewList from '../../components/reviews/ReviewList'
 import '../../styles/dashboard/admin-dashboard.css'
 import '../../styles/dashboard/booking-notifications.css'
 
@@ -304,6 +305,10 @@ function AdminDashboardPage() {
                       <img key={image.id} src={image.url} alt={image.alt || selectedHostel.name} loading="lazy" />
                     ))
                   )}
+                </div>
+
+                <div className="admin-modal-reviews">
+                  <ReviewList hostelId={selectedHostel.id} showSummary />
                 </div>
 
                 <div className="admin-modal-actions">

@@ -1,4 +1,5 @@
 import connection from "../config/db.js";
+import { checkFraud } from "../services/ai.client.js";
 
 const ROOM_TYPES = new Set(["Single Room", "Shared", "Studio", "Apartment"]);
 const AVAILABILITY_OPTIONS = new Set(["available", "full"]);
@@ -82,7 +83,7 @@ export const listMyHostels = (req, res) => {
   );
 };
 
-export const createHostel = (req, res) => {
+export const createHostel = async (req, res) => {
   const name = typeof req.body.name === "string" ? req.body.name.trim() : "";
   const location = typeof req.body.location === "string" ? req.body.location.trim() : "";
   const description = typeof req.body.description === "string" ? req.body.description.trim() : "";
@@ -115,6 +116,22 @@ export const createHostel = (req, res) => {
     return res.status(400).json({ message: "marker_y must be between 0 and 100" });
   }
 
+  // FR-25/FR-26: run the fraud/anomaly check. New listings are always unverified
+  // (hostels.verified defaults to FALSE), so a flagged listing simply stays in the
+  // admin pending list for manual review. Graceful: if the AI service is down,
+  // checkFraud resolves to null and creation proceeds normally.
+  const fraud = await checkFraud({
+    name,
+    location,
+    price,
+    distance_km: distanceKm ?? 0,
+    room_type: roomType,
+    description: description || "",
+  });
+  if (fraud?.flagged) {
+    console.warn(`[landlord] new hostel "${name}" flagged by fraud check: ${(fraud.reasons || []).join("; ")}`);
+  }
+
   connection.query(
     `INSERT INTO hostels
       (landlord_id, name, location, room_type, distance_km, price, description, utilities_included, availability, marker_x, marker_y)
@@ -137,12 +154,13 @@ export const createHostel = (req, res) => {
       return res.status(201).json({
         message: "Hostel created successfully",
         hostelId: result.insertId,
+        flagged: Boolean(fraud?.flagged),
       });
     }
   );
 };
 
-export const updateHostel = (req, res) => {
+export const updateHostel = async (req, res) => {
   const hostelId = Number.parseInt(req.params.id, 10);
   const name = typeof req.body.name === "string" ? req.body.name.trim() : "";
   const location = typeof req.body.location === "string" ? req.body.location.trim() : "";
@@ -182,15 +200,33 @@ export const updateHostel = (req, res) => {
   connection.query(
     "SELECT id FROM hostels WHERE id = ? AND landlord_id = ?",
     [hostelId, req.user.id],
-    (findErr, hostels) => {
+    async (findErr, hostels) => {
       if (findErr) return res.status(500).json({ error: findErr.message });
       if (hostels.length === 0) {
         return res.status(404).json({ message: "Hostel not found for this landlord" });
       }
 
+      // FR-25/FR-26: re-run the fraud check on edit. If the updated listing looks
+      // suspicious, send it back to pending (verified = FALSE) so an admin
+      // re-reviews it before it is visible to students. Graceful: checkFraud
+      // resolves to null if the AI service is down, leaving verification as-is.
+      const fraud = await checkFraud({
+        name,
+        location,
+        price,
+        distance_km: distanceKm ?? 0,
+        room_type: roomType,
+        description: description || "",
+      });
+      const flagged = Boolean(fraud?.flagged);
+      if (flagged) {
+        console.warn(`[landlord] updated hostel ${hostelId} flagged by fraud check: ${(fraud.reasons || []).join("; ")}`);
+      }
+      const verifiedClause = flagged ? ", verified = FALSE" : "";
+
       connection.query(
         `UPDATE hostels
-         SET name = ?, location = ?, room_type = ?, distance_km = ?, price = ?, description = ?, utilities_included = ?, availability = ?, marker_x = ?, marker_y = ?
+         SET name = ?, location = ?, room_type = ?, distance_km = ?, price = ?, description = ?, utilities_included = ?, availability = ?, marker_x = ?, marker_y = ?${verifiedClause}
          WHERE id = ? AND landlord_id = ?`,
         [
           name,
@@ -208,7 +244,7 @@ export const updateHostel = (req, res) => {
         ],
         (updateErr) => {
           if (updateErr) return res.status(500).json({ error: updateErr.message });
-          return res.status(200).json({ message: "Hostel updated successfully" });
+          return res.status(200).json({ message: "Hostel updated successfully", flagged });
         }
       );
     }

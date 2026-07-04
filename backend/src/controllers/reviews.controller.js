@@ -1,4 +1,5 @@
 import connection from "../config/db.js";
+import { analyzeSentiment } from "../services/ai.client.js";
 
 const MAX_COMMENT_LENGTH = 1000;
 
@@ -75,8 +76,25 @@ export const createReview = (req, res) => {
                       h.average_rating = (SELECT AVG(rating) FROM reviews WHERE hostel_id = h.id)
                     WHERE h.id = ?
                   `;
-                  connection.query(aggregateSql, [hostelId], (aggErr) => {
+                  connection.query(aggregateSql, [hostelId], async (aggErr) => {
                     if (aggErr) return res.status(500).json({ error: aggErr.message });
+
+                    // FR-24: run sentiment on the saved review text.
+                    // Storage decision: the schema has no sentiment column and
+                    // RULES.md forbids adding columns without a migration, so we
+                    // log the result server-side and return it in the response
+                    // for the client. It is intentionally NOT persisted. Graceful:
+                    // analyzeSentiment resolves to null if the AI service is down.
+                    let sentiment = null;
+                    if (comment) {
+                      const sentimentResult = await analyzeSentiment(comment);
+                      if (sentimentResult) {
+                        sentiment = sentimentResult;
+                        console.log(
+                          `[reviews] sentiment for review on hostel ${hostelId}: ${sentimentResult.sentiment} (${sentimentResult.score})`
+                        );
+                      }
+                    }
 
                     connection.query(
                       "SELECT id, rating, comment, created_at FROM reviews WHERE id = ?",
@@ -92,6 +110,7 @@ export const createReview = (req, res) => {
                             comment: row.comment,
                             createdAt: row.created_at,
                           },
+                          sentiment,
                         });
                       }
                     );

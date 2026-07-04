@@ -1,4 +1,6 @@
 import connection from "../config/db.js";
+import { getRecommendations } from "../services/ai.client.js";
+import { logInteraction, getUserHostelHistory } from "../services/interactions.service.js";
 
 const FILTER_OPTIONS = new Set(["top", "ai", "verified", "near", "budget", "premium"]);
 const SORT_MAP = {
@@ -11,14 +13,6 @@ const SORT_MAP = {
 const asPositiveNumber = (value) => {
   const parsed = Number(value);
   return Number.isFinite(parsed) && parsed >= 0 ? parsed : null;
-};
-
-const logInteraction = (userId, hostelId, type) => {
-  connection.query(
-    "INSERT INTO user_interactions (user_id, hostel_id, interaction_type) VALUES (?, ?, ?)",
-    [userId, hostelId, type],
-    () => {}
-  );
 };
 
 const mapRowToHostel = (row) => ({
@@ -141,9 +135,50 @@ export const listHostels = (req, res) => {
     ORDER BY ${orderBy}, h.id DESC, hi.is_primary DESC, hi.sort_order ASC, hi.id ASC
   `;
 
-  connection.query(sql, params, (err, results) => {
+  connection.query(sql, params, async (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
-    return res.status(200).json({ hostels: mergeHostelRows(results) });
+
+    const hostels = mergeHostelRows(results);
+
+    // FR-27: log the browse/search interaction (no specific hostel).
+    logInteraction(req.user.id, null, "search");
+
+    // FR-23: personalise via the AI service. Always graceful — if the service is
+    // down, getRecommendations resolves to null and we return the list unchanged.
+    try {
+      const history = await getUserHostelHistory(req.user.id);
+      const payload = hostels.map((hostel) => ({
+        id: hostel.id,
+        price: hostel.price,
+        distance_km: hostel.distanceKm,
+        room_type: hostel.roomType,
+        rating: hostel.averageRating || hostel.rating,
+      }));
+
+      const recommendation = await getRecommendations(req.user.id, payload, history);
+      const recommendedIds = recommendation?.recommendedIds || [];
+
+      if (recommendedIds.length) {
+        const recommendedSet = new Set(recommendedIds);
+        hostels.forEach((hostel) => {
+          if (recommendedSet.has(hostel.id)) hostel.aiPick = true;
+        });
+
+        // Float recommended hostels to the top when the user is on default sort.
+        if (sortBy === "relevance") {
+          const rank = new Map(recommendedIds.map((id, index) => [id, index]));
+          hostels.sort(
+            (a, b) =>
+              (rank.has(a.id) ? rank.get(a.id) : Number.MAX_SAFE_INTEGER) -
+              (rank.has(b.id) ? rank.get(b.id) : Number.MAX_SAFE_INTEGER)
+          );
+        }
+      }
+    } catch (aiError) {
+      console.warn(`[hostels] recommendation step skipped: ${aiError.message}`);
+    }
+
+    return res.status(200).json({ hostels });
   });
 };
 

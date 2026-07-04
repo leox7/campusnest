@@ -108,6 +108,8 @@ function StudentDashboardPage() {
     navigate(`/dashboard/student/hostels/${id}`)
   }
 
+  const hasAiPicks = !isLoading && !loadError && hostels.some((hostel) => hostel.aiPick)
+
   return (
     <StudentDashboardLayout activeNav="Browse Hostels">
       <section className="dashboard-hero">
@@ -223,6 +225,19 @@ function StudentDashboardPage() {
             </label>
           </div>
         </section>
+
+        {hasAiPicks ? (
+          <p
+            className="ai-recommend-hint"
+            style={{
+              margin: '0 0 1rem',
+              fontSize: '0.875rem',
+              color: '#475569',
+            }}
+          >
+            Recommended for you, based on hostels you have viewed, are marked with an AI Pick badge.
+          </p>
+        ) : null}
 
         <section className={`results-layout ${mapView ? 'map-open' : ''}`}>
           <div className="hostels-grid">

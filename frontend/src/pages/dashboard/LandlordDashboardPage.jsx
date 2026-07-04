@@ -10,6 +10,7 @@ import {
   updateLandlordHostelImage,
 } from '../../services/landlordHostels.service'
 import { getLandlordBookings } from '../../services/landlordBookings.service'
+import ReviewList from '../../components/reviews/ReviewList'
 import '../../styles/dashboard/landlord-dashboard.css'
 import '../../styles/dashboard/booking-notifications.css'
 
@@ -53,6 +54,7 @@ function LandlordDashboardPage() {
   const [imageFormByHostel, setImageFormByHostel] = useState({})
   const [bookings, setBookings] = useState([])
   const [bookingsLoading, setBookingsLoading] = useState(true)
+  const [openReviews, setOpenReviews] = useState({})
 
   const sortedHostels = useMemo(
     () => [...hostels].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()),
@@ -384,6 +386,14 @@ function LandlordDashboardPage() {
                   <button type="button" onClick={() => beginEdit(hostel)}>
                     Edit
                   </button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setOpenReviews((prev) => ({ ...prev, [hostel.id]: !prev[hostel.id] }))
+                    }
+                  >
+                    {openReviews[hostel.id] ? 'Hide reviews' : 'View reviews'}
+                  </button>
                   <button type="button" onClick={() => removeHostel(hostel.id)}>
                     Delete
                   </button>
@@ -429,6 +439,12 @@ function LandlordDashboardPage() {
                   ))}
                 </ul>
               </div>
+
+              {openReviews[hostel.id] ? (
+                <div className="landlord-hostel-reviews">
+                  <ReviewList hostelId={hostel.id} showSummary />
+                </div>
+              ) : null}
             </article>
           ))}
       </section>

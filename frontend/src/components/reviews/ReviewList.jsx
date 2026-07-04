@@ -14,7 +14,7 @@ const renderStars = (rating) => {
   return '★'.repeat(filled) + '☆'.repeat(5 - filled)
 }
 
-const ReviewList = forwardRef(function ReviewList({ hostelId }, ref) {
+const ReviewList = forwardRef(function ReviewList({ hostelId, showSummary = false }, ref) {
   const [reviews, setReviews] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
@@ -39,9 +39,24 @@ const ReviewList = forwardRef(function ReviewList({ hostelId }, ref) {
 
   useImperativeHandle(ref, () => ({ refresh: loadReviews }), [loadReviews])
 
+  const reviewCount = reviews.length
+  const averageRating =
+    reviewCount > 0 ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviewCount : 0
+
   return (
     <section className="review-list">
       <h3 className="review-list-title">Reviews</h3>
+
+      {showSummary && !isLoading && !error && reviewCount > 0 ? (
+        <div className="review-summary">
+          <span className="review-summary-stars" aria-hidden="true">
+            {renderStars(averageRating)}
+          </span>
+          <span className="review-summary-value">
+            {averageRating.toFixed(1)} / 5 from {reviewCount} review{reviewCount === 1 ? '' : 's'}
+          </span>
+        </div>
+      ) : null}
 
       {isLoading ? (
         <p className="review-list-status">Loading reviews...</p>
