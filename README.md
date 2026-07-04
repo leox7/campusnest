@@ -11,10 +11,10 @@
                   o	Service providers can be listed
                   o	Admin approves listings
 
-## AI Microservice (`ai-service/`)
+## AI Microservice (ai-service)
 
-A Python FastAPI service that powers recommendations (FR-23), review sentiment
-(FR-24), and listing fraud/anomaly detection (FR-25/FR-26). It uses lightweight
+A Python FastAPI service that powers recommendations  review sentiment
+, and listing fraud/anomaly detection. It uses lightweight
 scikit-learn / NLTK models and is integrated with the Node backend over REST
 only. The backend degrades gracefully: if this service is not running, the main
 app keeps working and simply skips the AI-enhanced behaviour.
