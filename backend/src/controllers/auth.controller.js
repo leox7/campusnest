@@ -54,7 +54,7 @@ export const register = async (req, res) => {
         if (results.length > 0) {
           return res.status(400).json({ message: "User already exists" });
         }
-//hash the password
+        // hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
 
         //insert the user into the database
@@ -107,7 +107,7 @@ export const login = async (req, res) => {
         }
 
         const user = results[0];
-//compare the password
+        // compare the password
         const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {

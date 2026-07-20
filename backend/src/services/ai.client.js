@@ -39,5 +39,3 @@ export const analyzeSentiment = (text) => postJson("/sentiment", { text: text ??
 
 // FR-25/FR-26. Returns { flagged, score, reasons } or null.
 export const checkFraud = (hostelData) => postJson("/fraud", hostelData ?? {}, null);
-
-export default { getRecommendations, analyzeSentiment, checkFraud };

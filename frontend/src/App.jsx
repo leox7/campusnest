@@ -12,6 +12,7 @@ import SavedHostelsPage from './pages/dashboard/SavedHostelsPage'
 import MyBookingsPage from './pages/dashboard/MyBookingsPage'
 import LandlordDashboardPage from './pages/dashboard/LandlordDashboardPage'
 import AdminDashboardPage from './pages/dashboard/AdminDashboardPage'
+import AdminUsersPage from './pages/dashboard/AdminUsersPage'
 import { GuestOnlyRoute, RequireAdminAuth, RequireLandlordAuth, RequireStudentAuth } from './routes/RouteGuards'
 
 function App() {
@@ -54,6 +55,14 @@ function App() {
         element={
           <RequireAdminAuth>
             <AdminDashboardPage />
+          </RequireAdminAuth>
+        }
+      />
+      <Route
+        path="/dashboard/admin/users"
+        element={
+          <RequireAdminAuth>
+            <AdminUsersPage />
           </RequireAdminAuth>
         }
       />

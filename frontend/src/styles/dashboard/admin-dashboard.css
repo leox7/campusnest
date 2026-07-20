@@ -16,6 +16,12 @@
   margin: 0;
 }
 
+.admin-dashboard-header-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
 .admin-dashboard-header button {
   border: 1px solid #ccb499;
   border-radius: 8px;

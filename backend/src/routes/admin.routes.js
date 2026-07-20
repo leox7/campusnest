@@ -3,6 +3,7 @@ import {
   getHostelByIdForAdmin,
   listHostels,
   listUsers,
+  updateUserActive,
   updateUserRole,
   verifyHostel,
 } from "../controllers/admin.controller.js";
@@ -19,5 +20,6 @@ router.get("/bookings", listAdminBookings);
 router.get("/hostels/:id", getHostelByIdForAdmin);
 router.put("/verify-hostel/:id", verifyHostel);
 router.patch("/users/:id/role", updateUserRole);
+router.patch("/users/:id/active", updateUserActive);
 
 export default router;

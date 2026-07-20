@@ -28,7 +28,7 @@ const mapHostelRow = (row) => ({
 
 export const listUsers = (req, res) => {
   connection.query(
-    "SELECT id, full_name, email, user_role, created_at FROM users ORDER BY created_at DESC",
+    "SELECT id, full_name, email, user_role, is_active, created_at FROM users ORDER BY created_at DESC",
     (err, results) => {
       if (err) return res.status(500).json({ error: err.message });
       return res.status(200).json({ users: results });
@@ -62,6 +62,44 @@ export const updateUserRole = (req, res) => {
       (updateErr) => {
         if (updateErr) return res.status(500).json({ error: updateErr.message });
         return res.status(200).json({ message: "User role updated successfully" });
+      }
+    );
+  });
+};
+
+// NOTE: Deactivating a user does not invalidate any JWT they already hold.
+// Enforcing that immediately would require a token blocklist or short expiry,
+// which is out of scope for Phase 5. A deactivated user keeps access until
+// their current token expires.
+export const updateUserActive = (req, res) => {
+  const userId = Number.parseInt(req.params.id, 10);
+  const rawActive = req.body.is_active;
+  const canParseBool =
+    typeof rawActive === "boolean" || rawActive === "true" || rawActive === "false";
+  const isActive = rawActive === true || rawActive === "true";
+
+  if (!Number.isInteger(userId) || userId <= 0) {
+    return res.status(400).json({ message: "Invalid user ID" });
+  }
+  if (!canParseBool) {
+    return res.status(400).json({ message: "is_active must be true or false" });
+  }
+  if (req.user.id === userId) {
+    return res.status(400).json({ message: "Admin cannot deactivate their own account" });
+  }
+
+  connection.query("SELECT id FROM users WHERE id = ?", [userId], (findErr, users) => {
+    if (findErr) return res.status(500).json({ error: findErr.message });
+    if (users.length === 0) return res.status(404).json({ message: "User not found" });
+
+    connection.query(
+      "UPDATE users SET is_active = ? WHERE id = ?",
+      [isActive, userId],
+      (updateErr) => {
+        if (updateErr) return res.status(500).json({ error: updateErr.message });
+        return res.status(200).json({
+          message: isActive ? "User activated successfully" : "User deactivated successfully",
+        });
       }
     );
   });

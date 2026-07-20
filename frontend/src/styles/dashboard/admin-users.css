@@ -1,0 +1,164 @@
+.admin-users-shell {
+  min-height: 100vh;
+  background: #ebefee;
+  color: #4a413c;
+  padding: 24px;
+}
+
+.admin-users-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.admin-users-header h1 {
+  margin: 0 0 8px;
+}
+
+.admin-users-back {
+  border: 1px solid #ccb499;
+  border-radius: 8px;
+  background: #fff;
+  color: #4a413c;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.admin-users-error {
+  margin-top: 12px;
+  color: #b85454;
+  font-weight: 600;
+}
+
+.admin-users-loading {
+  margin-top: 16px;
+}
+
+.admin-users-confirm {
+  margin-top: 16px;
+  background: #fff8ec;
+  border: 1px solid #e2c79a;
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.admin-users-confirm span {
+  font-weight: 600;
+}
+
+.admin-users-confirm-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.admin-users-confirm-actions button {
+  border: 1px solid #ccb499;
+  border-radius: 8px;
+  background: #4a413c;
+  color: #fff;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+
+.admin-users-confirm-actions button.secondary {
+  background: #fff;
+  color: #4a413c;
+}
+
+.admin-users-confirm-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.admin-users-card {
+  margin-top: 16px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(74, 65, 60, 0.08);
+  padding: 16px;
+}
+
+.admin-users-table-wrap {
+  overflow-x: auto;
+}
+
+.admin-users-card table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-users-card th,
+.admin-users-card td {
+  border-bottom: 1px solid rgba(204, 180, 153, 0.5);
+  text-align: left;
+  padding: 10px 8px;
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+.admin-users-card select {
+  border: 1px solid #ccb499;
+  border-radius: 8px;
+  background: #fff;
+  color: #4a413c;
+  padding: 6px 10px;
+}
+
+.admin-users-card select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.admin-users-badge {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.admin-users-badge.active {
+  background: #e2f5e6;
+  color: #2f7d43;
+}
+
+.admin-users-badge.inactive {
+  background: #fbe4e4;
+  color: #b85454;
+}
+
+.admin-users-card td button {
+  border-radius: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.admin-users-card td button.danger {
+  border-color: #d99a9a;
+  background: #fff;
+  color: #b85454;
+}
+
+.admin-users-card td button.success {
+  border-color: #a7ccb0;
+  background: #fff;
+  color: #2f7d43;
+}
+
+.admin-users-card td button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 767px) {
+  .admin-users-shell {
+    padding: 12px;
+  }
+}

@@ -115,9 +115,14 @@ function AdminDashboardPage() {
             </span>
           ) : null}
         </h1>
-        <button type="button" onClick={handleLogout}>
-          Logout
-        </button>
+        <div className="admin-dashboard-header-actions">
+          <button type="button" onClick={() => navigate('/dashboard/admin/users')}>
+            Manage Users
+          </button>
+          <button type="button" onClick={handleLogout}>
+            Logout
+          </button>
+        </div>
       </header>
 
       {error ? <p className="admin-error">{error}</p> : null}

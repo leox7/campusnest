@@ -1,5 +1,6 @@
 import js from '@eslint/js'
 import globals from 'globals'
+import react from 'eslint-plugin-react'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import { defineConfig, globalIgnores } from 'eslint/config'
@@ -8,6 +9,7 @@ export default defineConfig([
   globalIgnores(['dist']),
   {
     files: ['**/*.{js,jsx}'],
+    plugins: { react },
     extends: [
       js.configs.recommended,
       reactHooks.configs.flat.recommended,
@@ -23,7 +25,14 @@ export default defineConfig([
       },
     },
     rules: {
-      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+      // Mark components referenced in JSX as "used" so no-unused-vars can correctly
+      // flag genuinely-dead component imports without false positives.
+      'react/jsx-uses-vars': 'error',
+      'no-unused-vars': ['error', {
+        args: 'none',
+        varsIgnorePattern: '^_',
+        ignoreRestSiblings: true,
+      }],
     },
   },
 ])
