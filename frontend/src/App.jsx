@@ -10,6 +10,7 @@ import StudentDashboardPage from './pages/dashboard/StudentDashboardPage'
 import StudentHostelDetailPage from './pages/dashboard/StudentHostelDetailPage'
 import SavedHostelsPage from './pages/dashboard/SavedHostelsPage'
 import MyBookingsPage from './pages/dashboard/MyBookingsPage'
+import StudentProfilePage from './pages/dashboard/StudentProfilePage'
 import LandlordDashboardPage from './pages/dashboard/LandlordDashboardPage'
 import AdminDashboardPage from './pages/dashboard/AdminDashboardPage'
 import AdminUsersPage from './pages/dashboard/AdminUsersPage'
@@ -39,6 +40,14 @@ function App() {
         element={
           <RequireStudentAuth>
             <MyBookingsPage />
+          </RequireStudentAuth>
+        }
+      />
+      <Route
+        path="/dashboard/student/profile"
+        element={
+          <RequireStudentAuth>
+            <StudentProfilePage />
           </RequireStudentAuth>
         }
       />

@@ -167,7 +167,7 @@ function StudentDashboardPage() {
               />
             </div>
             <p>
-              KES {priceMin.toLocaleString('en-KE')} - KES {priceMax.toLocaleString('en-KE')}
+              KSH {priceMin.toLocaleString('en-KE')} - KSH {priceMax.toLocaleString('en-KE')}
             </p>
           </div>
 

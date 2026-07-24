@@ -97,7 +97,7 @@ export const login = async (req, res) => {
 
   try {
     connection.query(
-      "SELECT id, email, password, user_role FROM users WHERE email = ?",
+      "SELECT id, full_name, email, password, user_role FROM users WHERE email = ?",
       [email],
       async (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
@@ -133,6 +133,7 @@ export const login = async (req, res) => {
           token,
           user: {
             id: user.id,
+            name: user.full_name,
             email: user.email,
             role: user.user_role,
           },

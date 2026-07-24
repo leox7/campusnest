@@ -283,7 +283,7 @@ function LandlordDashboardPage() {
                   </span>
                   <span>
                     <strong>Price:</strong>{' '}
-                    {booking.price === null ? '-' : `KES ${Number(booking.price).toLocaleString('en-KE')}`}
+                    {booking.price === null ? '-' : `KSH ${Number(booking.price).toLocaleString('en-KE')}`}
                   </span>
                   <span>
                     <strong>Payment:</strong>{' '}
@@ -400,7 +400,7 @@ function LandlordDashboardPage() {
                 </div>
               </div>
               <p>
-                {hostel.location} • {hostel.room_type} • KES {Number(hostel.price).toLocaleString('en-KE')} •{' '}
+                {hostel.location} • {hostel.room_type} • KSH {Number(hostel.price).toLocaleString('en-KE')} •{' '}
                 {hostel.availability}
               </p>
 

@@ -181,7 +181,7 @@ function AdminDashboardPage() {
                       <th>Name</th>
                       <th>Location</th>
                       <th>Landlord</th>
-                      <th>Price (KES)</th>
+                      <th>Price (KSH)</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -294,7 +294,7 @@ function AdminDashboardPage() {
                 <div className="admin-modal-meta">
                   <span>{selectedHostel?.location}</span>
                   <span>{selectedHostel?.roomType}</span>
-                  <span>KES {Number(selectedHostel?.price ?? 0).toLocaleString('en-KE')}</span>
+                  <span>KSH {Number(selectedHostel?.price ?? 0).toLocaleString('en-KE')}</span>
                   <span>{selectedHostel?.verified ? 'Verified' : 'Pending'}</span>
                 </div>
 
