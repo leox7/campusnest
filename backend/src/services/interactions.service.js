@@ -29,17 +29,22 @@ export const getUserHostelHistory = (userId, limit = 20) =>
       return;
     }
 
+    // Group by hostel so each appears once, ordered by its most recent
+    // interaction. GROUP BY + MAX(created_at) is ONLY_FULL_GROUP_BY safe,
+    // unlike SELECT DISTINCT with an ORDER BY on a non-selected column.
     const sql = `
-      SELECT DISTINCT
+      SELECT
         h.id,
         h.price,
         h.distance_km,
         h.room_type,
-        COALESCE(h.average_rating, 0) AS rating
+        COALESCE(h.average_rating, 0) AS rating,
+        MAX(ui.created_at) AS last_seen
       FROM user_interactions ui
       INNER JOIN hostels h ON h.id = ui.hostel_id
       WHERE ui.user_id = ? AND ui.hostel_id IS NOT NULL
-      ORDER BY ui.created_at DESC
+      GROUP BY h.id, h.price, h.distance_km, h.room_type, h.average_rating
+      ORDER BY last_seen DESC
       LIMIT ?
     `;
 
